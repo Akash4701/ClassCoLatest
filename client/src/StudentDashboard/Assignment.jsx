@@ -8,6 +8,7 @@ function Assignments() {
   const [isHovered, setIsHovered] = useState(false);
   const [file, setFile] = useState(null);
   const [video, setVideo] = useState(null);
+  const StudentId = localStorage.getItem("studentId");
   const onChange = e => {
     setFile(e.target.files[0]);
   };
@@ -29,6 +30,7 @@ function Assignments() {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('id', e.target[0].value);
+      formData.append('StudentId',StudentId);
       try {
         const res = await axios.post('http://localhost:8000/api/v1/students/solAssign', formData, {
           headers: {
@@ -54,6 +56,7 @@ function Assignments() {
 
       formData.append('video', video);
       formData.append('id', e.target[0].value);
+      formData.append('StudentId',StudentId);
       try {
         const res = await axios.post('http://localhost:8000/api/v1/students/solAssignVid', formData, {
           headers: {
