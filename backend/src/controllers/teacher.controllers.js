@@ -80,6 +80,7 @@ const registerTeacher = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, teacherUser, "Teacher registered Successfully"));
 });
 
+
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
   console.log(req.body);
@@ -162,7 +163,9 @@ const findTeacherByUsername = asyncHandler(async (req, res) => {
     }
     res
       .status(200)
-      .json(new ApiResponse(200, teacher, "teacher found successfully"));
+      .json(new ApiResponse(200, await teacher.populate({path:'assignments', populate: {
+        path: 'solution.student'
+      }}), "teacher found successfully"));
   } catch (error) {
     console.log(error);
     res
@@ -176,5 +179,31 @@ const findTeacherByUsername = asyncHandler(async (req, res) => {
       );
   }
 });
+
+// const getAssign = asyncHandler(async (req, res) => {
+//   const { username } = req.params;
+//   try {
+//     const teacher = await Teacher.findOne({ username:username });
+//     console.log("fwsfdsa : ",teacher);
+//     if (!teacher) {
+//       throw new ApiError(404, "teacher not found");
+//     }
+//     res
+//       .status(200)
+//       .json(new ApiResponse(200, teacher.assignments, "teacher found successfully"));
+//   } catch (error) {
+//     console.log(error);
+
+//     res
+//       .status(error.statusCode || 500)
+//       .json(
+//         new ApiResponse(
+//           error.statusCode || 500,
+//           null,
+//           error.message || "Internal Server Error",
+//         ),
+//       );
+//   }
+// });
 
 export { registerTeacher, loginUser, logoutUser,findTeacherByUsername };

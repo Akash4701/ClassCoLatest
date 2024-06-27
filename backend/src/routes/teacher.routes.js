@@ -9,7 +9,6 @@ import { v2 as cloudinary } from 'cloudinary';
 const upload = multer({ storage });
 
 const router = Router()
-
 router.route("/register").post(upload.single('teacherImg'),registerTeacher)
 router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT,  logoutUser)

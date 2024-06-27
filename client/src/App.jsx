@@ -17,7 +17,7 @@ import QuizPage from './components/QuizPage';
 import Fruit from './components/Memorygames/fruits';
 import ManageStud from './TeacherComponents/Manage_Stud';
 import Reward from './TeacherComponents/RewardSection/Reward'
-
+import MyAssign from './TeacherComponents/myAssignment';
 
 import Login from './Login';
 import Logout from './Logout';
@@ -33,6 +33,7 @@ function App() {
       <Routes>
       <Route path="/Teach" element={<Teacher/>} />
       <Route path="/uploadAssign" element={<AssignmentUpload/>}/>
+      <Route path="/myAssign" element={<MyAssign/>}/>
       <Route path="/Stud/:studentId/Voca" element={<Vocab/>}/>
       <Route path="/teachquiz" element={<QuestionUpload/>}/>
       <Route path="/previewquiz" element={<QuizPreview/>}/>
