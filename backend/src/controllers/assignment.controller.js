@@ -13,10 +13,10 @@ import path from 'path';
 const upload = multer({ dest: 'uploads/' });
 
 const giveAssignment = asyncHandler(async (req, res) => {
-  const { title, description, className, subject, teacherName, guidelines, deadline } = req.body;
+  const { title, description, className, subject, teacherName, guidelines, deadline,teacherUsername } = req.body;
   console.log(title)
   if (
-    [title, description, className, subject, teacherName, guidelines, deadline].some((field) => field?.trim() === "")
+    [title, description, className, subject, teacherName, guidelines, deadline,teacherUsername ].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "All fields are required");
   }
@@ -30,6 +30,11 @@ const giveAssignment = asyncHandler(async (req, res) => {
     deadline
 
   })
+
+  const teacher=await Teacher.findOne({username:teacherUsername});
+  console.log("teache:",teacher);
+  teacher.assignments.push(assignment._id);
+  teacher.save();
   const createdAssignment = await Assignment.findById(assignment._id)
 
   if (!createdAssignment) {
@@ -57,13 +62,13 @@ const getAssignments = asyncHandler(async (req, res) => {
 
 
 const solAssign = asyncHandler(async (req, res) => {
-  const { id } = req.body;
-  console.log(id);
+  const { id,StudentId} = req.body;
+  console.log(StudentId);
   const solAssign = await Assignment.findById(id);
   if (req.file) {
     console.log(req.file.secure_url);
     const url = req.file.path;
-    solAssign.solution = [...solAssign.solution, url];
+    solAssign.solution = [...solAssign.solution,{url:url,student:StudentId}];
     await solAssign.save();
   }
   return res
@@ -74,7 +79,7 @@ const solAssign = asyncHandler(async (req, res) => {
 
 
 const solAssignVid = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const { id,StudentId } = req.body;
   const filePath = req.file.path;
   const solAssignVid = await Assignment.findById(id);
   try {
@@ -84,7 +89,7 @@ const solAssignVid = asyncHandler(async (req, res) => {
       folder: 'videoSolutions',
     });
     fs.unlinkSync(filePath);
-    solAssignVid.vidSolution = [...solAssignVid.vidSolution, result.secure_url];
+    solAssignVid.vidSolution = [...solAssignVid.vidSolution, {url:result.secure_url,student:StudentId}];
     await solAssignVid.save();
     // Send the Cloudinary URL in the response
     res.status(200).json({ message: 'Video uploaded successfully', url: result.secure_url });

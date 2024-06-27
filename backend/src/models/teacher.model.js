@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+import { Assignment } from "../models/assignment.model.js";
 const teacherSchema = new Schema(
   {
     dp:String,
@@ -50,6 +50,10 @@ const teacherSchema = new Schema(
     allowedStudents:[{
         type:Schema.Types.ObjectId,
         ref:"Student"
+    }],
+    assignments:[{
+      type:Schema.Types.ObjectId,
+      ref:"Assignment"
     }]
 },
   {

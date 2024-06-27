@@ -1,5 +1,5 @@
 import mongoose,{Schema} from "mongoose";
-
+import { Student } from "../models/student.model.js";
 const assignmentSchema = new Schema(
   {
     title: {
@@ -36,8 +36,14 @@ const assignmentSchema = new Schema(
       type:Boolean,
       default:false
     },
-    solution:[String],
-    vidSolution:[String],
+    solution:[{
+      url:String,
+      student:{type:Schema.Types.ObjectId,ref:Student}
+    }],
+    vidSolution:[{
+      url:String,
+      student:{type:Schema.Types.ObjectId,ref:Student}
+    }],
   },
   {
     timestamps: true,
